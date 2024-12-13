@@ -16,24 +16,26 @@ async function handler(req, res) {
       res.status(500).json({ message: 'Error fetching tasks', error: error.message });
     }
   }
-
   if (req.method === 'POST') {
+    const newTask = req.body;
+
+    if (!newTask.text) {
+      return res.status(400).json({ error: 'Task text is required' });
+    }
+
     try {
       await client.connect();
       const db = client.db();
       const taskCollection = db.collection('Todos');
-      const newTask = req.body;
-  
-      // Insert the task into the database
-      const result = await taskCollection.insertOne(newTask);
       
-      // If successful, return the task data (including the _id)
-      res.status(201).json({ message: 'Task added successfully', task: result.ops[0] });
+      const result = await taskCollection.insertOne(newTask);
+
+      res.status(201).json({ task: { ...newTask, _id: result.insertedId } });
     } catch (error) {
-      console.error('Error adding task:', error); // Log the error for debugging
-      res.status(500).json({ message: 'Error adding task', error: error.message });
+      console.error('Error adding task:', error);
+      res.status(500).json({ error: 'Failed to add task' });
     } finally {
-      client.close();
+      await client.close();
     }
   }
 }

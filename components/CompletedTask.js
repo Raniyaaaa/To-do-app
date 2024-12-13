@@ -8,7 +8,7 @@ const CompletedPage = () => {
     const fetchCompletedTasks = async () => {
       const res = await fetch('/api/task');
       const data = await res.json();
-      setTasks(data.tasks.filter(task => task.completed)); // Filter tasks to show only completed ones
+      setTasks(data.tasks.filter(task => task.status ==='completed'));
     };
 
     fetchCompletedTasks();
@@ -35,7 +35,7 @@ const CompletedPage = () => {
         {tasks.length > 0 ? (
           tasks.map((task) => (
             <div
-              key={task._id}  // MongoDB _id as key
+              key={task._id}
               style={{
                 backgroundColor: '#fff',
                 border: '1px solid #ddd',
