@@ -5,8 +5,13 @@ const CompletedPage = () => {
   const [tasks, setTasks] = useState([]);
 
   useEffect(() => {
-    const savedTasks = JSON.parse(localStorage.getItem('tasks')) || [];
-    setTasks(savedTasks);
+    const fetchCompletedTasks = async () => {
+      const res = await fetch('/api/task');
+      const data = await res.json();
+      setTasks(data.tasks.filter(task => task.completed)); // Filter tasks to show only completed ones
+    };
+
+    fetchCompletedTasks();
   }, []);
 
   return (
@@ -27,25 +32,29 @@ const CompletedPage = () => {
       }}>Completed Tasks</h1>
 
       <div>
-        {tasks.filter(task => task.completed).map((task) => (
-          <div
-            key={task.id}
-            style={{
-              backgroundColor: '#fff',
-              border: '1px solid #ddd',
-              padding: '10px',
-              margin: '10px 0',
-              borderRadius: '4px',
-            }}
-          >
-            <span style={{
-              flex: '1',
-              fontSize: '18px',
-            }}>
-              {task.text}
-            </span>
-          </div>
-        ))}
+        {tasks.length > 0 ? (
+          tasks.map((task) => (
+            <div
+              key={task._id}  // MongoDB _id as key
+              style={{
+                backgroundColor: '#fff',
+                border: '1px solid #ddd',
+                padding: '10px',
+                margin: '10px 0',
+                borderRadius: '4px',
+              }}
+            >
+              <span style={{
+                flex: '1',
+                fontSize: '18px',
+              }}>
+                {task.text}
+              </span>
+            </div>
+          ))
+        ) : (
+          <p style={{ textAlign: 'center' }}>No completed tasks available.</p>
+        )}
       </div>
     </div>
   );
