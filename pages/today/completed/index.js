@@ -5,6 +5,7 @@ function Completedpage(props) {
         <CompletedTask tasks={props.tasks}/>
     )
 }
+
 export async function getServerSideProps() {
     const client = await MongoClient.connect(
       "mongodb+srv://RaniyaRasheed:Raniya12345678@cluster0.8qy45.mongodb.net/Todos?retryWrites=true&w=majority"
