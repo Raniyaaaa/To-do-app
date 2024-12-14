@@ -24,6 +24,7 @@ export default async function handler(req, res) {
     }
     res.status(200).json({ message: 'Task updated successfully' });
   } 
+  
   else if (req.method === 'DELETE') {
     const { id } = req.body;
     const result = await taskCollection.deleteOne({ _id: new ObjectId(id) });

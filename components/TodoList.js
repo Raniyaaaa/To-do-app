@@ -34,6 +34,7 @@ const TodoList = ({ tasks: initialTasks }) => {
     }
   };
 
+  
   const deleteTask = async (taskId) => {
     try {
       const res = await fetch('/api/task', {
@@ -77,7 +78,7 @@ const TodoList = ({ tasks: initialTasks }) => {
     setEditingTaskId(taskId);
     setEditingText(currentText);
   };
-  
+
   const saveEditHandler = async () => {
     if (editingText.trim() !== '') {
       const task = tasks.find((t) => t.id === editingTaskId);
@@ -90,7 +91,7 @@ const TodoList = ({ tasks: initialTasks }) => {
           body: JSON.stringify({ 
             id: editingTaskId, 
             text: editingText, 
-            status: task.status // Keep the existing status
+            status: task.status
           }),
           headers: { 'Content-Type': 'application/json' },
         });
@@ -122,7 +123,6 @@ const TodoList = ({ tasks: initialTasks }) => {
         boxShadow: '0 2px 5px rgba(0, 0, 0, 0.1)',
       }}
     >
-      {/* Button to toggle input form */}
       <FaPlus
         size={24}
         style={{
@@ -132,7 +132,6 @@ const TodoList = ({ tasks: initialTasks }) => {
         onClick={() => setShowForm(!showForm)}
       />
 
-      {/* Task Input Form */}
       {showForm && (
         <div
           style={{
